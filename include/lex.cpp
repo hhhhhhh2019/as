@@ -19,7 +19,10 @@ std::vector<std::string> instructions = {
 	"hlt",
 	"mov",
 	"push","pushr","pushl","pushi","pushs","pushb",
-	"pop"
+	"pop",
+	"sum","sub","cmp",
+	"jmp","je","jne","jl","jb","jle","jbe",
+	"call","ret",
 };
 
 
@@ -73,6 +76,9 @@ struct Lex {
 
 				if (std::regex_match(val, std::regex("\\{0x[0-9]+\\}")))
 					type = TOKEN_TYPE::addr_out_hex;
+
+				if (val[0] == '%')
+					type = TOKEN_TYPE::preprocessor;
 
 
 				t.type = type;

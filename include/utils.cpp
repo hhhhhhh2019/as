@@ -109,3 +109,9 @@ unsigned int register_size(std::string s) {
 		return 1;
 	return -1;
 }
+
+bool is_hex(std::string s) {
+	if (s.size() <= 2) return 0;
+	if (s[2] != 'x') return 0;
+	return 1;
+}

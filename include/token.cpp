@@ -10,6 +10,7 @@ enum TOKEN_TYPE {
 	addr_in_hex,
 	addr_out,
 	addr_out_hex,
+	preprocessor,
 	undefined
 };
 
