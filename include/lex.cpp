@@ -105,7 +105,9 @@ struct Lex {
 				continue;
 			} else {
 				offset++;
-				val += c;
+
+				if (c != '\n' && c != ' ' && c != '\t')
+					val += c;
 			}
 
 			if (c == '\n') {
