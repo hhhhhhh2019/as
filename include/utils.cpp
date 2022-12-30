@@ -58,6 +58,19 @@ uint128 string_to_number128(std::string s) {
 	return res;
 }
 
+uint128 hex_string_to_number128(std::string s) {
+	uint128 res = 0;
+
+	for (int i = 2; i < s.size(); i++) {
+		if (s[i] >= 'a')
+			res += (s[i] - 'a' + 10) * pow((uint128)16,(uint128)s.size()-i-1);
+		else
+			res += (s[i] - '0') * pow((uint128)16,(uint128)s.size()-i-1);
+	}
+
+	return res;
+}
+
 unsigned int register_id(std::string s) {
 	std::string s2 = s.substr(1,s.size()-1);
 

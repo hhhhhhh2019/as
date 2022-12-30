@@ -58,10 +58,16 @@ struct Synt {
 					output.push_back(0x00);
 					output.push_back(register_id(t2.value));
 					output.push_back(register_id(t3.value));
-				} if (t3.type == number) {
+				} else if (t3.type == number) {
 					output.push_back(0x01);
 					output.push_back(register_id(t2.value));
 					uint128 n = string_to_number128(t3.value);
+					for (int i = 0; i < register_size(t2.value); i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t3.type == hex_number) {
+					output.push_back(0x01);
+					output.push_back(register_id(t2.value));
+					uint128 n = hex_string_to_number128(t3.value);
 					for (int i = 0; i < register_size(t2.value); i++)
 						output.push_back((n >> i * 8) & 0xff);
 				} else {
@@ -70,6 +76,150 @@ struct Synt {
 					ok = 0;
 					continue;
 				}
+			}
+
+			if (t1.value == "push") {
+				Token t2 = tokens[i++];
+
+				if (t2.type != reg) {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается регистр!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+
+				output.push_back(0x02);
+				output.push_back(0x00);
+				output.push_back(register_id(t2.value));
+			}
+
+			if (t1.value == "pushr") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x02);
+
+				output.push_back(0x00);
+
+				if (t2.type == number) {
+					uint128 n = string_to_number128(t2.value);
+					for (int i = 0; i < 16; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t2.type == hex_number) {
+					uint128 n = hex_string_to_number128(t2.value);
+					for (int i = 0; i < 16; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "pushl") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x03);
+
+				output.push_back(0x00);
+
+				if (t2.type == number) {
+					uint128 n = string_to_number128(t2.value);
+					for (int i = 0; i < 8; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t2.type == hex_number) {
+					uint128 n = hex_string_to_number128(t2.value);
+					for (int i = 0; i < 8; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "pushi") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x04);
+
+				output.push_back(0x00);
+
+				if (t2.type == number) {
+					uint128 n = string_to_number128(t2.value);
+					for (int i = 0; i < 4; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t2.type == hex_number) {
+					uint128 n = hex_string_to_number128(t2.value);
+					for (int i = 0; i < 4; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "pushs") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x05);
+
+				output.push_back(0x00);
+
+				if (t2.type == number) {
+					uint128 n = string_to_number128(t2.value);
+					for (int i = 0; i < 2; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t2.type == hex_number) {
+					uint128 n = hex_string_to_number128(t2.value);
+					for (int i = 0; i < 2; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "pushb") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x06);
+
+				output.push_back(0x00);
+
+				if (t2.type == number) {
+					uint128 n = string_to_number128(t2.value);
+					for (int i = 0; i < 1; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else if (t2.type == hex_number) {
+					uint128 n = hex_string_to_number128(t2.value);
+					for (int i = 0; i < 1; i++)
+						output.push_back((n >> i * 8) & 0xff);
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "pop") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x02);
+				output.push_back(0x01);
+
+				output.push_back(register_id(t2.value));
 			}
 		}
 

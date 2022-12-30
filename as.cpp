@@ -86,14 +86,16 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 
-	if (synt.parse(lex.tokens) == 0) {
-		return -1;
-	}
 
 
 	/*for (int i = 0; i < lex.tokens.size(); i++) {
 		printf("%s %i\n", lex.tokens[i].value.c_str(), lex.tokens[i].type);
 	}*/
+
+
+	if (synt.parse(lex.tokens) == 0) {
+		return -1;
+	}
 
 
 	FILE *output_file = fopen(output_filename, "wb");

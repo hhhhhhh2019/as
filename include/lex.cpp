@@ -53,7 +53,7 @@ struct Lex {
 				if (std::regex_match(val, std::regex("[0-9]+")))
 					type = TOKEN_TYPE::number;
 
-				if (std::regex_match(val, std::regex("0x[0-9]+")))
+				if (std::regex_match(val, std::regex("0x[a-f0-9]+")))
 					type = TOKEN_TYPE::hex_number;
 
 				if (is_register(val))
