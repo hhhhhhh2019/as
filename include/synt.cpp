@@ -14,19 +14,72 @@
 #include <vector>
 
 
+struct Label {
+	std::string value;
+	unsigned long offset;
+};
+
+
 struct Synt {
 	std::vector<char> output;
+	std::vector<Label> labels;
+	std::vector<unsigned long> label_offsets;
+
+	char parse_labels(std::vector<Token> tokens) {
+		char ok = 1;
+		unsigned int fst = 0;
+
+		for (int i = 0; i < tokens.size(); i++) {
+			if (tokens[i].type == preprocessor) {
+				if (tokens[i].value.size() <= 2) continue;
+				if (tokens[i].value[1] != '&') continue;
+
+				std::string l = tokens[i].value.substr(2) + ':';
+				bool find = 0;
+
+				if (label_offsets.size() == 0) continue;
+
+				for (int j = 0; j < labels.size(); j++) {
+					if (l == labels[j].value) {
+						uint128 n = labels[j].offset;
+						uint128 offset = label_offsets[fst++];
+						for (int i = 0; i < 8; i++) {
+							output[offset+i] = (n >> i * 8) & 0xff;
+						}
+						find = 1;
+					}
+				}
+
+				if (find == 0) {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n", tokens[i].line,tokens[i].offset, "Метка не найдена!", tokens[i].value.c_str());
+					ok = 0;
+				}
+			}
+		}
+
+		return ok;
+	}
 
 	char parse(std::vector<Token> tokens) {
+		output.clear();
+		labels.clear();
+
 		char ok = 1;
 		unsigned int i = 0;
 
 		unsigned long offset = 0;
 
-		output.clear();
-
 		while (i < tokens.size()) {
 			Token t1 = tokens[i++];
+
+			if (t1.type == label) {
+				Label l;
+				l.value = t1.value;
+				l.offset = output.size() + offset;
+				labels.push_back(l);
+
+				continue;
+			}
 
 			if (t1.type == preprocessor) {
 				if (t1.value == "%org") {
@@ -36,8 +89,11 @@ struct Synt {
 						offset = hex_string_to_number128(t2.value);
 					else
 						offset = string_to_number128(t2.value);
+				}
 
-					printf("%lu %s\n", offset, t2.value.c_str());
+				if (t1.value.size() >= 2) {
+					if (t1.value[1] == '&')
+						printf("%i,%i \e[1;35m%-6s\e[m\n", t1.line,t1.offset, "На кой тут эта метка?");
 				}
 
 				continue;
@@ -340,7 +396,26 @@ struct Synt {
 				output.push_back(0x01);
 				output.push_back(register_id("l31"));
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -365,7 +440,26 @@ struct Synt {
 				output.push_back(0x00);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -390,7 +484,26 @@ struct Synt {
 				output.push_back(0x01);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -415,7 +528,26 @@ struct Synt {
 				output.push_back(0x02);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -440,7 +572,26 @@ struct Synt {
 				output.push_back(0x03);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -465,7 +616,26 @@ struct Synt {
 				output.push_back(0x04);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -490,7 +660,26 @@ struct Synt {
 				output.push_back(0x05);
 				output.push_back(0);
 
-				if (t2.type == number) {
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				}	else if (t2.type == number) {
 					uint128 n = string_to_number128(t2.value) + offset;
 					for (int i = 0; i < 8; i++) {
 						output.push_back((n >> i * 8) & 0xff);
@@ -509,6 +698,6 @@ struct Synt {
 			}
 		}
 
-		return ok;
+		return ok & parse_labels(tokens);
 	}
 };

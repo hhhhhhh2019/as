@@ -11,6 +11,7 @@ enum TOKEN_TYPE {
 	addr_out,
 	addr_out_hex,
 	preprocessor,
+	label,
 	undefined
 };
 

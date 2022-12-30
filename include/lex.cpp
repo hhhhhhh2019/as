@@ -80,6 +80,9 @@ struct Lex {
 				if (val[0] == '%')
 					type = TOKEN_TYPE::preprocessor;
 
+				if (val[val.size()-1] == ':')
+					type = TOKEN_TYPE::label;
+
 
 				t.type = type;
 
