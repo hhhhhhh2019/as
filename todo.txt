@@ -1,0 +1,11 @@
+int
+iret
+mul
+div
+or
+and
+xor
+lshft
+rshft
+mov to global mem
+mov from global mem

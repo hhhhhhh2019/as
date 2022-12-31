@@ -46,7 +46,7 @@ struct Lex {
 
 			if ((c == '\n' || c == '\t' || c == ' ' || c == '#') && is_comment == 0 && val.size() != 0) {
 				Token t;
-				t.line = line - 1;
+				t.line = line;
 				t.offset = offset - val.size();
 				t.value = val;
 
@@ -96,13 +96,6 @@ struct Lex {
 				}
 
 				val = "";
-
-				if (c == '\n') {
-					line++;
-					offset = 1;
-				}
-
-				continue;
 			} else {
 				offset++;
 
@@ -113,6 +106,8 @@ struct Lex {
 			if (c == '\n') {
 				is_comment = 0;
 				val = "";
+				line++;
+				offset = 1;
 			}
 
 			if (c == '#')

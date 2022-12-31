@@ -696,6 +696,66 @@ struct Synt {
 					continue;
 				}
 			}
+
+			if (t1.value == "call") {
+				Token t2 = tokens[i++];
+
+				output.push_back(0x03);
+
+				if (t2.type == preprocessor) {
+					if (t2.value.size() >= 2) {
+						if (t2.value[1] == '&') {
+							output.push_back(0x06);
+							output.push_back(0x00);
+
+							if (t2.value.size() == 2) {
+								uint128 n = output.size() - 3 + offset;
+								for (int i = 0; i < 8; i++) {
+									output.push_back((n >> i * 8) & 0xff);
+								}
+							} else {
+								label_offsets.push_back(output.size());
+								for (int i = 0; i < 8; i++) {
+									output.push_back(0);
+								}
+							}
+							continue;
+						}
+					}
+					printf("%i,%i \e[1;31m%-6s\e[m\n", t2.line,t2.offset, "Сударь, вам не кажется, что здесь что-то не так?");
+					ok = 0;
+				} else if (t2.type == number) {
+					output.push_back(0x06);
+					output.push_back(0x00);
+
+					uint128 n = string_to_number128(t2.value) + offset;
+					for (int i = 0; i < 8; i++) {
+						output.push_back((n >> i * 8) & 0xff);
+					}
+				} else if (t2.type == hex_number) {
+					output.push_back(0x06);
+					output.push_back(0x00);
+
+					uint128 n = hex_string_to_number128(t2.value); + offset;
+					for (int i = 0; i < 8; i++) {
+						output.push_back((n >> i * 8) & 0xff);
+					}
+				} else if (t2.type == reg) {
+					output.push_back(0x07);
+					output.push_back(register_id(t2.value));
+				} else {
+					printf("%i,%i \e[1;31m%-6s\e[m %s\n",
+						t2.line,t2.offset, "Ожидается число/регистр!", t2.value.c_str());
+					ok = 0;
+					continue;
+				}
+			}
+
+			if (t1.value == "ret") {
+				output.push_back(0x03);
+				output.push_back(0x08);
+				output.push_back(0x00);
+			}
 		}
 
 		return ok & parse_labels(tokens);
