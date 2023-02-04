@@ -10,7 +10,11 @@ char asciitolower(char in) {
 
 
 std::vector<std::string> instructions = {
-	"mov","hlt","sum","sub","cmp","push","pop","jmp","je","jl","jb","jne","jle","jbe","call","ret","int","iret"
+	"hlt",
+	"mov",
+	"sum","sub","cmp",
+	"push","pop","pushb","pushs","pushi","pushl","pushr",
+	"jmp","je","jl","jb","jne","jle","jbe","call","ret","int","iret"
 };
 
 
@@ -39,24 +43,21 @@ void Lex::parse() {
 	for (int i = 0; i < code_length; i++) {
 		char c = asciitolower(code[i]);
 
-		if (c == '#')
-			comment = 1;
-
-		if ((!('a' <= c && c <= 'z') && !('0' <= c && c <= '9') && c != '%' && c != '$' && c != ':') && comment == 0) {
+		if ((!('a' <= c && c <= 'z') && !('0' <= c && c <= '9') && c != '%' && c != '$' && c != ':' && c != '[' && c != ']' && c != '{' && c != '}' && c != '-') && comment == 0) {
 			if (val.size() > 0) {
 				Token token;
 
 				token.value = val;
 				token.line = line;
-				token.offset = offset - val.size() - 1;
+				token.offset = offset - val.size();
 
 				char type = TYPE_UNDEFINED;
 
 				if (val[0] == '%') {
 					type = TYPE_PREPROCESSOR;
-				} else if (regex_match(val, std::regex("[0-9]+"))) {
+				} else if (regex_match(val, std::regex("-?[0-9]+"))) {
 					type = TYPE_NUMBER;
-				} else if (regex_match(val, std::regex("0x[0-9a-f]+"))) {
+				} else if (regex_match(val, std::regex("-?0x[0-9a-f]+"))) {
 					type = TYPE_HEX_NUMBER;
 				} else if (val_in_vector(instructions, val)) {
 					type = TYPE_INSTRUCTION;
@@ -68,7 +69,7 @@ void Lex::parse() {
 					type = TYPE_HEX_ADDR_WRITE;
 				} else if (regex_match(val, std::regex("\\{[0-9]+\\}g"))) {
 					type = TYPE_ADDR_WRITE_ABS;
-				} else if (regex_match(val, std::regex("\\{0x[0-9a-f]+\\}g"))) {
+				} else if (regex_match(val, std::regex("\\{0x[0-9a-f]+\\}a"))) {
 					type = TYPE_HEX_ADDR_WRITE_ABS;
 				} else if (regex_match(val, std::regex("\\[[0-9]+\\]"))) {
 					type = TYPE_ADDR_READ;
@@ -76,10 +77,14 @@ void Lex::parse() {
 					type = TYPE_HEX_ADDR_READ;
 				} else if (regex_match(val, std::regex("\\[[0-9]+\\]g"))) {
 					type = TYPE_ADDR_READ_ABS;
-				} else if (regex_match(val, std::regex("\\[0x[0-9a-f]+\\]g"))) {
+				} else if (regex_match(val, std::regex("\\[0x[0-9a-f]+\\]a"))) {
 					type = TYPE_HEX_ADDR_READ_ABS;
 				} else if (val.back() == ':') {
 					type = TYPE_LABEL;
+				} else if (regex_match(val, std::regex("\\[.+\\]"))) {
+					type = TYPE_LABEL_ADDR_READ;
+				} else if (regex_match(val, std::regex("\\{.+\\}"))) {
+					type = TYPE_LABEL_ADDR_WRITE;
 				}
 
 				token.type = type;
@@ -88,14 +93,17 @@ void Lex::parse() {
 			}
 
 			val.clear();
-		} else {
+		} else if (comment == 0) {
 			val += c;
 		}
+
+		if (c == '#')
+			comment = 1;
 
 		if (c == '\n') {
 			comment = 0;
 			line++;
-			offset = 1;
+			offset = 0;
 		}
 
 		offset++;

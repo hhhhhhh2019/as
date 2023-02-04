@@ -19,6 +19,8 @@
 #define TYPE_HEX_ADDR_WRITE_ABS 12
 #define TYPE_HEX_ADDR_READ_ABS 13
 #define TYPE_LABEL 14
+#define TYPE_LABEL_ADDR_WRITE 15
+#define TYPE_LABEL_ADDR_READ 16
 
 struct Token {
 	std::string value;

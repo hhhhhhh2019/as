@@ -4,16 +4,6 @@
 #include <synt.h>
 
 
-
-#ifndef DEBUG
-	#define LOG
-#else
-	#define LOG(...) printf(__VA_ARGS__)
-#endif
-
-#define INFO(msg) LOG("\e[1;34m%s\e[m", msg)
-
-
 char* input_name;
 char* output_name = (char*)"a.out";
 char ok = 0;
@@ -74,6 +64,13 @@ int main(int argc, char** argv) {
 	lex.code_length = input_size;
 
 	lex.parse();
+
+
+	#ifdef DEBUG
+	for (int i = 0; i < lex.tokens.size(); i++) {
+		printf("%i %s\n", lex.tokens[i].type, lex.tokens[i].value.c_str());
+	}
+	#endif
 
 
 	synt.clear();
