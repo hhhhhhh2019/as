@@ -1,26 +1,19 @@
-#pragma once
+#ifndef SYNT_H
+#define SYNT_H
 
+#include <lex.h>
+#include <elf.h>
 
-#include <token.h>
-#include <vector>
+typedef struct {
+	char ok;
+	char *code;
+	unsigned int code_size;
+	Name_sec_elem *names;
+	unsigned int names_count;
+	Addr_sec_elem *addrs;
+	unsigned int addrs_count;
+} Synt_result;
 
+Synt_result synt_parse(Lex_result lex);
 
-
-struct Label {
-	std::string value;
-	unsigned long offset;
-};
-
-
-struct Synt {
-	std::vector<Label> labels;
-	std::vector<Label> alabels;
-	std::vector<Token> tokens;
-	std::vector<char> output;
-
-	unsigned long org;
-
-	void clear();
-	char parse();
-	char parse_labels();
-};
+#endif // SYNT_H

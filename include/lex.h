@@ -1,18 +1,14 @@
-#pragma once
+#ifndef LEX_H
+#define LEX_H
 
-#include <vector>
-#include <string>
 #include <token.h>
 
+typedef struct {
+	unsigned int count;
+	Token* tokens;
+} Lex_result;
 
-struct Lex {
-	std::vector<Token> tokens;
-	char* code;
-	unsigned int code_length;
-
-	char ok;
+Lex_result lex_parse(char *text, unsigned int size);
 
 
-	void clear();
-	void parse();
-};
+#endif // LEX_H

@@ -1,8 +1,5 @@
-#pragma once
-
-#include <string>
-
-
+#ifndef TOKEN_H
+#define TOKEN_H
 
 #define TYPE_UNDEFINED 0
 #define TYPE_PREPROCESSOR 1
@@ -10,21 +7,22 @@
 #define TYPE_HEX_NUMBER 3
 #define TYPE_INSTRUCTION 4
 #define TYPE_REGISTER 5
-#define TYPE_ADDR_WRITE 6
-#define TYPE_ADDR_READ 7
-#define TYPE_HEX_ADDR_WRITE 8
-#define TYPE_HEX_ADDR_READ 9
-#define TYPE_ADDR_WRITE_ABS 10
-#define TYPE_ADDR_READ_ABS 11
-#define TYPE_HEX_ADDR_WRITE_ABS 12
-#define TYPE_HEX_ADDR_READ_ABS 13
-#define TYPE_LABEL 14
-#define TYPE_LABEL_ADDR_WRITE 15
-#define TYPE_LABEL_ADDR_READ 16
+#define TYPE_LABEL 6
 
-struct Token {
-	std::string value;
-	char type = TYPE_UNDEFINED;
-	unsigned int offset;
+#define TYPE_SUM 100
+#define TYPE_SUB 101
+#define TYPE_MUL 102
+#define TYPE_DIV 103
+#define TYPE_ADDR_START 104
+#define TYPE_ADDR_END 105
+#define TYPE_GLOBAL_ADDR_START 106
+#define TYPE_GLOBAL_ADDR_END 107
+
+typedef struct {
+	char type;
 	unsigned int line;
-};
+	unsigned int offset;
+	char *value;
+} Token;
+
+#endif // TOKEN_H

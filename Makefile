@@ -1,19 +1,19 @@
-CC = g++ -I ./include -c -DDEBUG
-LD = g++
+CC = gcc -I ./include -c -DDEBUG -fsanitize=address -g
+LD = gcc -fsanitize=address -g
 
 
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
+SOURCES = $(wildcard *.c)
+OBJECTS = $(SOURCES:.c=.o)
 
 
 
-%.o: %.cpp
+%.o: %.c
 	$(CC) $< -o $@
 
 all: $(OBJECTS)
 	$(LD) $^ -o as
-	./as -i bios.asm -o std_bios.bin
-	./emulator
+	./as bios.asm -o std_bios.elf
+	#./emulator
 
 
 clean:
