@@ -56,11 +56,63 @@ int main(int argc, char **argv) {
 	Lex_result lex = lex_parse(input_data, input_size);
 	Synt_result synt = synt_parse(lex);
 
+
+	ELF elf = {"ELF\0\0\0", 1, TYPE_STAT};
+
+	Code_sec* code = malloc(sizeof(Code_sec) + synt.code_size);
+	Addr_sec* addr = malloc(sizeof(Addr_sec) + synt.addrs_count * sizeof(Addr_sec_elem));
+
+	code->size = sizeof(Code_sec) + synt.code_size;
+	memcpy(code->data, synt.code, synt.code_size);
+
+	addr->size = sizeof(Addr_sec) + synt.addrs_count * sizeof(Addr_sec_elem);
+	memcpy(addr->elems, synt.addrs, synt.addrs_count * sizeof(Addr_sec_elem));
+
+	unsigned int offset = sizeof(ELF);
+
+	if (code->size > 8) {
+		elf.code_entry = offset;
+		offset += code->size;
+	}
+
+	elf.name_entry = 0;
+
+	if (addr->size > 8) {
+		elf.addr_entry = offset;
+		offset += addr->size;
+	}
+
+
+	f = fopen(output_path, "wb");
+
+	if (f == NULL) {
+		printf("Файл %s создать невозможно!\n", output_path);
+
+		free(code);
+		free(addr);
+
+		return 1;
+	}
+
+	fwrite(&elf, sizeof(ELF), 1, f);
+
+	if (code->size > 8)
+		fwrite(code, code->size, 1, f);
+	if (addr->size > 8)
+		fwrite(addr, addr->size, 1, f);
+
+	free(code);
+	free(addr);
+
+
 	printf("Токены:\n");
 
 	for (int i = 0; i < lex.count; i++) {
-		printf("%d,%d %d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);
-
+		/*if (lex.tokens[i].type == TYPE_NEW_LINE)
+			printf("%d,%-4d %d \\n\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type);
+		else
+			printf("%d,%-4d %d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);
+*/
 		free(lex.tokens[i].value);
 	}
 
@@ -77,8 +129,9 @@ int main(int argc, char **argv) {
 		for (int j = 0; j < 64; j++)
 			if (synt.addrs[i].name[j] == 0)
 				break;
-			else
+			else {
 				putc(synt.addrs[i].name[j], stdout);
+			}
 		printf(": %d\n", synt.addrs[i].offset);
 	}
 

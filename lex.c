@@ -20,7 +20,7 @@ char lower(char c) {
 }
 
 char is_stop_symb(char c) {
-	return !('a' <= c && c <= 'z') && !('0' <= c && c <= '9') && c != '#' && c != ':' && c != '%';
+	return !('a' <= c && c <= 'z') && !('0' <= c && c <= '9') && c != '.' && c != ':' && c != '%';
 }
 
 char is_instr(char* str) {
@@ -74,7 +74,7 @@ Lex_result lex_parse(char *text, unsigned int size) {
 						token.type = TYPE_REGISTER;
 					} else if (is_instr(token.value)) {
 						token.type = TYPE_INSTRUCTION;
-					} else if (token.value[0] == '#') {
+					} else if (token.value[0] == '.') {
 						token.type = TYPE_PREPROCESSOR;
 					} else if (token.value[value_size - 1] == ':') {
 						token.type = TYPE_LABEL;
@@ -91,35 +91,41 @@ Lex_result lex_parse(char *text, unsigned int size) {
 				value = realloc(value, ++value_size);
 				value[value_size - 1] = c;
 			}
-		}
 
-		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '[' || c == ']' || c == '{' || c == '}') {
-			Token token;
+			if (c == '+' || c == '-' || c == '*' || c == '/' || c == '[' || c == ']' || c == '{' || c == '}' || c == '\n' || c == '(' || c == ')') {
+				Token token;
 
-			if (c == '+')
-				token.type = TYPE_SUM;
-			if (c == '-')
-				token.type = TYPE_SUB;
-			if (c == '*')
-				token.type = TYPE_MUL;
-			if (c == '/')
-				token.type = TYPE_DIV;
-			if (c == '[')
-				token.type = TYPE_ADDR_START;
-			if (c == ']')
-				token.type = TYPE_ADDR_END;
-			if (c == '{')
-				token.type = TYPE_GLOBAL_ADDR_START;
-			if (c == '}')
-				token.type = TYPE_GLOBAL_ADDR_END;
-			token.line = line;
-			token.offset = offset;
-			token.value = malloc(2);
-			token.value[0] = c;
-			token.value[1] = 0;
+				if (c == '+')
+					token.type = TYPE_SUM;
+				if (c == '-')
+					token.type = TYPE_SUB;
+				if (c == '*')
+					token.type = TYPE_MUL;
+				if (c == '/')
+					token.type = TYPE_DIV;
+				if (c == '[')
+					token.type = TYPE_ADDR_START;
+				if (c == ']')
+					token.type = TYPE_ADDR_END;
+				if (c == '{')
+					token.type = TYPE_GLOBAL_ADDR_START;
+				if (c == '}')
+					token.type = TYPE_GLOBAL_ADDR_END;
+				if (c == '\n')
+					token.type = TYPE_NEW_LINE;
+				if (c == '(')
+					token.type = TYPE_BRACKET_START;
+				if (c == ')')
+					token.type = TYPE_BRACKET_END;
+				token.line = line;
+				token.offset = offset;
+				token.value = malloc(2);
+				token.value[0] = c;
+				token.value[1] = 0;
 
-			res.tokens = realloc(res.tokens, (++res.count) * sizeof(Token));
-			memcpy(&res.tokens[res.count - 1], &token, sizeof(Token));
+				res.tokens = realloc(res.tokens, (++res.count) * sizeof(Token));
+				memcpy(&res.tokens[res.count - 1], &token, sizeof(Token));
+			}
 		}
 
 		offset++;
@@ -136,6 +142,16 @@ Lex_result lex_parse(char *text, unsigned int size) {
 	}
 
 	free(value);
+
+	if (res.tokens[res.count - 1].type != TYPE_NEW_LINE) {
+		Token token = {TYPE_NEW_LINE, line,offset};
+		token.value = malloc(2);
+		token.value[0] = '\n';
+		token.value[1] = 0;
+
+		res.tokens = realloc(res.tokens, (++res.count) * sizeof(Token));
+		memcpy(&res.tokens[res.count - 1], &token, sizeof(Token));
+	}
 
 	return res;
 }
