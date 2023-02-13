@@ -1,4 +1,5 @@
 #include <utils.h>
+#include <token.h>
 
 
 int str_len(char* str) {
@@ -73,4 +74,38 @@ __int128 h2n(char* str) {
 			res += (*((str++)+sign) - 'a' + 10) * pow128(16, i--);
 	}
 	return res * -(sign * 2 - 1);
+}
+
+
+void print_token_type(char t) {
+	if (t == TYPE_UNDEFINED)
+		printf("undefined\0");
+	else if (t == TYPE_NUMBER)
+		printf("число\0");
+	else if (t == TYPE_HEX_NUMBER)
+		printf("число\0");
+	else if (t == TYPE_REGISTER)
+		printf("регистр\0");
+	else if (t == TYPE_INSTRUCTION)
+		printf("инструкция\0");
+	else if (t == TYPE_PREPROCESSOR)
+		printf("препроце\0");
+	else if (t == TYPE_LABEL)
+		printf("метка\0");
+	else if (t == TYPE_SUM)
+		printf("мат. операнд\0");
+	else if (t == TYPE_SUB)
+		printf("мат. операнд\0");
+	else if (t == TYPE_MUL)
+		printf("мат. операнд\0");
+	else if (t == TYPE_DIV)
+		printf("мат. операнд\0");
+	else if (t == TYPE_BRACKET_START)
+		printf("мат. операнд\0");
+	else if (t == TYPE_BRACKET_END)
+		printf("мат. операнд\0");
+	else if (t == TYPE_ADDR_START)
+		printf("адрес\0");
+	else if (t == TYPE_GLOBAL_ADDR_START)
+		printf("адрес\0");
 }

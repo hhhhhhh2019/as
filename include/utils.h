@@ -3,12 +3,14 @@
 
 #include <stdio.h>
 
-int str_len(char* str);
-char is_dec(char* str);
-char is_hex(char* str);
-char is_reg(char* str);
+int str_len(char*);
+char is_dec(char*);
+char is_hex(char*);
+char is_reg(char*);
 
-__int128 s2n(char* str);
-__int128 h2n(char* str);
+__int128 s2n(char*);
+__int128 h2n(char*);
+
+void print_token_type(char);
 
 #endif // UTILS_H

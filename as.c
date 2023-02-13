@@ -111,8 +111,7 @@ int main(int argc, char **argv) {
 		/*if (lex.tokens[i].type == TYPE_NEW_LINE)
 			printf("%d,%-4d %d \\n\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type);
 		else
-			printf("%d,%-4d %d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);
-*/
+			printf("%d,%-4d %d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);*/
 		free(lex.tokens[i].value);
 	}
 

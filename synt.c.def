@@ -5,13 +5,6 @@
 #include <utils.h>
 
 
-typedef struct {
-	void* parent;
-	void* left;
-	void* right;
-	Token* value;
-} Node;
-
 
 void print_node(Node*, int);
 
@@ -464,14 +457,13 @@ Synt_result synt_parse(Lex_result lex) {
 						printf("\e[1;31mОшибка!\e[m %d,%d: \"%s\" Ожидался регистр/число/адрес!\n", t.line,t.offset,t.value);
 					}
 				} else if (t2.type == TYPE_ADDR_START) {
-					Token t = t2;
-
+					Token t = lex.tokens[i];
 					Token *tokens = malloc(0);
 					unsigned int tokens_count = 0;
 					char has_name = 0;
 					unsigned int end_id = 0;
 
-					while (t.type != TYPE_NEW_LINE && t.type != TYPE_REGISTER) {
+					while (t.type != TYPE_NEW_LINE) {
 						if (t.type == TYPE_UNDEFINED)
 							has_name = 1;
 
@@ -485,6 +477,13 @@ Synt_result synt_parse(Lex_result lex) {
 						t = lex.tokens[++i];
 					}
 
+					tokens_count -= 1;
+
+					printf("%d %d\n", tokens_count, end_id);
+
+					for (int j = 0; j < tokens_count; j++)
+						printf("%s ", tokens[j].value);
+
 					if (end_id == 0) {
 						printf("\e[1;31mОшибка!\e[m %d,%d: Конец выражения не обнаружен!\n", t2.line,t2.offset);
 						res.ok = 0;
@@ -495,7 +494,7 @@ Synt_result synt_parse(Lex_result lex) {
 						putc('\n', stdout);
 						res.ok = 0;
 					} else if (tokens_count == 3 && tokens[1].type == TYPE_REGISTER) {
-						Token t3 = lex.tokens[i++];
+						Token t3 = lex.tokens[i-1];
 
 						if (t3.type == TYPE_REGISTER) {
 							res.code_size = 2 + 1;
@@ -511,6 +510,8 @@ Synt_result synt_parse(Lex_result lex) {
 						Node* root = create_math_tree(tokens, tokens_count);
 						unsigned int root_size = get_tree_size(root);
 
+						print_node(root,1);
+
 						if (root_size != tokens_count - 2) {
 							printf("\e[1;31mОшибка!\e[m %d,%d: Обнаружен мусор после выражения! ", tokens[root_size].line,tokens[root_size].offset);
 							for (int j = root_size + 1; j < tokens_count - 1; j++)
@@ -518,7 +519,7 @@ Synt_result synt_parse(Lex_result lex) {
 							putc('\n', stdout);
 							res.ok = 0;
 						} else {
-							Token t3 = lex.tokens[i++];
+							Token t3 = lex.tokens[i-1];
 
 							if (t3.type == TYPE_REGISTER) {
 								res.code_size = 2 + 8;
