@@ -57,16 +57,33 @@ int main(int argc, char **argv) {
 	Synt_result synt = synt_parse(lex);
 
 
+	if (synt.ok == 0) {
+		for (int i = 0; i < lex.count; i++)
+			free(lex.tokens[i].value);
+		free(synt.code);
+		free(synt.names);
+		free(synt.addrs);
+
+		free(input_data);
+		free(lex.tokens);
+		return 1;
+	}
+
+
 	ELF elf = {"ELF\0\0\0", 1, TYPE_STAT};
 
 	Code_sec* code = malloc(sizeof(Code_sec) + synt.code_size);
 	Addr_sec* addr = malloc(sizeof(Addr_sec) + synt.addrs_count * sizeof(Addr_sec_elem));
+	Name_sec* name = malloc(sizeof(Name_sec) + synt.names_count * sizeof(Name_sec_elem));
 
 	code->size = sizeof(Code_sec) + synt.code_size;
 	memcpy(code->data, synt.code, synt.code_size);
 
 	addr->size = sizeof(Addr_sec) + synt.addrs_count * sizeof(Addr_sec_elem);
 	memcpy(addr->elems, synt.addrs, synt.addrs_count * sizeof(Addr_sec_elem));
+
+	name->size = sizeof(Name_sec) + synt.names_count * sizeof(Name_sec_elem);
+	memcpy(name->elems, synt.names, synt.names_count * sizeof(Name_sec_elem));
 
 	unsigned int offset = sizeof(ELF);
 
@@ -75,11 +92,14 @@ int main(int argc, char **argv) {
 		offset += code->size;
 	}
 
-	elf.name_entry = 0;
-
 	if (addr->size > 8) {
 		elf.addr_entry = offset;
 		offset += addr->size;
+	}
+
+	if (name->size > 8) {
+		elf.name_entry = offset;
+		offset += name->size;
 	}
 
 
@@ -90,6 +110,7 @@ int main(int argc, char **argv) {
 
 		free(code);
 		free(addr);
+		free(name);
 
 		return 1;
 	}
@@ -100,18 +121,21 @@ int main(int argc, char **argv) {
 		fwrite(code, code->size, 1, f);
 	if (addr->size > 8)
 		fwrite(addr, addr->size, 1, f);
+	if (name->size > 8)
+		fwrite(name, name->size, 1, f);
 
 	free(code);
 	free(addr);
+	free(name);
 
 
 	printf("Токены:\n");
 
 	for (int i = 0; i < lex.count; i++) {
 		/*if (lex.tokens[i].type == TYPE_NEW_LINE)
-			printf("%d,%-4d %d \\n\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type);
+			printf("%d,%-4d %-3d \\n\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type);
 		else
-			printf("%d,%-4d %d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);*/
+			printf("%d,%-4d %-3d %s\n", lex.tokens[i].line, lex.tokens[i].offset, lex.tokens[i].type, lex.tokens[i].value);*/
 		free(lex.tokens[i].value);
 	}
 
@@ -132,6 +156,19 @@ int main(int argc, char **argv) {
 				putc(synt.addrs[i].name[j], stdout);
 			}
 		printf(": %d\n", synt.addrs[i].offset);
+	}
+
+	printf("\nИмена:\n");
+
+	for (int i = 0; i < synt.names_count; i++) {
+		putc('\t', stdout);
+		for (int j = 0; j < 64; j++)
+			if (synt.names[i].name[j] == 0)
+				break;
+			else {
+				putc(synt.names[i].name[j], stdout);
+			}
+		printf(": %d\n", synt.names[i].offset);
 	}
 
 	free(synt.code);

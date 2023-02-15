@@ -5,11 +5,13 @@
 #include <utils.h>
 
 
-char instructions[16][5] = {
-	"nop\0\0", "hlt\0\0",
-	"movb\0", "movs\0", "movi\0", "movl\0", "movr\0",
-	"jmp\0\0", "je\0\0\0", "jl\0\0\0", "jb\0\0\0", "jne\0\0", "jbe\0\0", "jle\0\0",
-	"call\0", "ret\0\0"
+char instructions[][6] = {
+	"nop\0\0\0", "hlt\0\0\0",
+	"movb\0\0", "movs\0\0", "movi\0\0", "movl\0\0", "movr\0\0",
+	"jmp\0\0\0", "je\0\0\0\0", "jl\0\0\0\0", "jb\0\0\0\0", "jne\0\0\0", "jbe\0\0\0", "jle\0\0\0",
+	"call\0\0", "ret\0\0\0",
+	"pushb\0", "pushs\0", "pushi\0", "pushl\0", "pushr\0",
+	"popb\0\0", "pops\0\0", "popi\0\0", "popl\0\0", "popr\0\0"
 };
 
 
@@ -24,7 +26,7 @@ char is_stop_symb(char c) {
 }
 
 char is_instr(char* str) {
-	for (int i = 0; i < sizeof(instructions) / 5; i++) {
+	for (int i = 0; i < sizeof(instructions) / sizeof(instructions[0]); i++) {
 		if (strcmp(instructions[i], str) == 0)
 			return 1;
 	}
@@ -135,6 +137,18 @@ Lex_result lex_parse(char *text, unsigned int size) {
 		}
 
 		if (c == '\n') {
+			Token token;
+			token.line = line;
+			token.offset = offset;
+			token.value = malloc(2);
+			token.value[0] = '\n';
+			token.value[1] = 0;
+			token.type = TYPE_NEW_LINE;
+
+			res.tokens = realloc(res.tokens, (++res.count) * sizeof(Token));
+			memcpy(&res.tokens[res.count - 1], &token, sizeof(Token));
+
+
 			comment = 0;
 			line++;
 			offset = 1;

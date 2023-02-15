@@ -80,9 +80,7 @@ __int128 h2n(char* str) {
 void print_token_type(char t) {
 	if (t == TYPE_UNDEFINED)
 		printf("undefined\0");
-	else if (t == TYPE_NUMBER)
-		printf("число\0");
-	else if (t == TYPE_HEX_NUMBER)
+	else if (t == TYPE_NUMBER || t == TYPE_HEX_NUMBER)
 		printf("число\0");
 	else if (t == TYPE_REGISTER)
 		printf("регистр\0");
@@ -92,20 +90,8 @@ void print_token_type(char t) {
 		printf("препроце\0");
 	else if (t == TYPE_LABEL)
 		printf("метка\0");
-	else if (t == TYPE_SUM)
+	else if (t == TYPE_SUM || t == TYPE_SUB || t == TYPE_MUL || t == TYPE_DIV || t == TYPE_BRACKET_START || t == TYPE_BRACKET_END)
 		printf("мат. операнд\0");
-	else if (t == TYPE_SUB)
-		printf("мат. операнд\0");
-	else if (t == TYPE_MUL)
-		printf("мат. операнд\0");
-	else if (t == TYPE_DIV)
-		printf("мат. операнд\0");
-	else if (t == TYPE_BRACKET_START)
-		printf("мат. операнд\0");
-	else if (t == TYPE_BRACKET_END)
-		printf("мат. операнд\0");
-	else if (t == TYPE_ADDR_START)
-		printf("адрес\0");
-	else if (t == TYPE_GLOBAL_ADDR_START)
+	else if (t == TYPE_ADDR_START || t == TYPE_GLOBAL_ADDR_START)
 		printf("адрес\0");
 }
