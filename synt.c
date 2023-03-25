@@ -1871,7 +1871,7 @@ Synt_result synt_parse(Lex_result lex) {
 				}
 
 				free(tokens);
-			} else if (strcmp(t1.value, "popb\0") == 0) {
+			} else if (strcmp(t1.value, "popb\0\0") == 0) {
 				Token t2 = lex.tokens[ti++];
 
 				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
@@ -1884,7 +1884,7 @@ Synt_result synt_parse(Lex_result lex) {
 				res.code = realloc(res.code, res.code_size);
 				res.code[res.code_size-2] = 0x34; // popb
 				res.code[res.code_size-1] = s2n(t2.value+1) & 0xff;
-			} else if (strcmp(t1.value, "pops\0") == 0) {
+			} else if (strcmp(t1.value, "pops\0\0") == 0) {
 				Token t2 = lex.tokens[ti++];
 
 				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
@@ -1897,7 +1897,7 @@ Synt_result synt_parse(Lex_result lex) {
 				res.code = realloc(res.code, res.code_size);
 				res.code[res.code_size-2] = 0x35; // pops
 				res.code[res.code_size-1] = s2n(t2.value+1) & 0xff;
-			}else if (strcmp(t1.value, "popi\0") == 0) {
+			} else if (strcmp(t1.value, "popi\0\0") == 0) {
 				Token t2 = lex.tokens[ti++];
 
 				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
@@ -1910,7 +1910,7 @@ Synt_result synt_parse(Lex_result lex) {
 				res.code = realloc(res.code, res.code_size);
 				res.code[res.code_size-2] = 0x36; // popi
 				res.code[res.code_size-1] = s2n(t2.value+1) & 0xff;
-			}else if (strcmp(t1.value, "popl\0") == 0) {
+			} else if (strcmp(t1.value, "popl\0\0") == 0) {
 				Token t2 = lex.tokens[ti++];
 
 				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
@@ -1923,7 +1923,7 @@ Synt_result synt_parse(Lex_result lex) {
 				res.code = realloc(res.code, res.code_size);
 				res.code[res.code_size-2] = 0x37; // popl
 				res.code[res.code_size-1] = s2n(t2.value+1) & 0xff;
-			}else if (strcmp(t1.value, "popr\0") == 0) {
+			} else if (strcmp(t1.value, "popr\0\0") == 0) {
 				Token t2 = lex.tokens[ti++];
 
 				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
@@ -1936,6 +1936,981 @@ Synt_result synt_parse(Lex_result lex) {
 				res.code = realloc(res.code, res.code_size);
 				res.code[res.code_size-2] = 0x38; // popr
 				res.code[res.code_size-1] = s2n(t2.value+1) & 0xff;
+			} else if (strcmp(t1.value, "sumb\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x39; // sumb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "sums\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3a; // sums
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "sumi\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3b; // sumi
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "suml\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3c; // suml
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "sumr\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3d; // sumr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "subb\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3e; // subb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "subs\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x3f; // subs
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "subi\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x40; // subi
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "subl\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x41; // subl
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "subr\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x42; // subr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "mulb\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x43; // mulb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "muls\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x44; // muls
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "muli\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x45; // muli
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "mull\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x46; // mull
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "mulr\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x47; // mulr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "imulb\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x48; // imulb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "imuls\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x49; // imuls
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "imuli\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4a; // imuli
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "imull\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4b; // imull
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "imulr\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4c; // imulr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "divb\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4d; // divb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "divs\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4e; // divs
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "divi\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x4f; // divi
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "divl\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x50; // divl
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "divr\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x51; // divr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "idivb\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x52; // idivb
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "idivs\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x53; // idivs
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "idivi\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x54; // idivi
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "idivl\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x55; // idivl
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "idivr\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+				Token t4 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t4, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 4;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-4] = 0x56; // idivr
+				res.code[res.code_size-3] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-2] = s2n(t3.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t4.value+1) & 0xff;
+			} else if (strcmp(t1.value, "cmpb\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 3;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x57; // cmpb
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
+			} else if (strcmp(t1.value, "cmps\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 3;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x58; // cmps
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
+			} else if (strcmp(t1.value, "cmpi\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 3;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x59; // cmpi
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
+			} else if (strcmp(t1.value, "cmpl\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 3;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x5a; // cmpl
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
+			} else if (strcmp(t1.value, "cmpr\0\0") == 0) {
+				Token t2 = lex.tokens[ti++];
+				Token t3 = lex.tokens[ti++];
+
+				if (match(t2, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				if (match(t3, (char[]){TYPE_REGISTER}, 1) == 0) {
+					next_line(lex.tokens);
+					res.ok = 0;
+					continue;
+				}
+
+				res.code_size += 3;
+				res.code = realloc(res.code, res.code_size);
+				res.code[res.code_size-3] = 0x5b; // cmpr
+				res.code[res.code_size-2] = s2n(t2.value+1) & 0xff;
+				res.code[res.code_size-1] = s2n(t3.value+1) & 0xff;
 			}
 		}
 

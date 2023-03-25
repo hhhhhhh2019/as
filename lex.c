@@ -11,7 +11,15 @@ char instructions[][6] = {
 	"jmp\0\0\0", "je\0\0\0\0", "jl\0\0\0\0", "jb\0\0\0\0", "jne\0\0\0", "jbe\0\0\0", "jle\0\0\0",
 	"call\0\0", "ret\0\0\0",
 	"pushb\0", "pushs\0", "pushi\0", "pushl\0", "pushr\0",
-	"popb\0\0", "pops\0\0", "popi\0\0", "popl\0\0", "popr\0\0"
+	"popb\0\0", "pops\0\0", "popi\0\0", "popl\0\0", "popr\0\0",
+	"sumb\0\0", "sums\0\0", "sumi\0\0", "suml\0\0", "sumr\0\0",
+	"subb\0\0", "subs\0\0", "subi\0\0", "subl\0\0", "subr\0\0",
+	"mulb\0\0", "muls\0\0", "muli\0\0", "mull\0\0", "mulr\0\0",
+	"divb\0\0", "divs\0\0", "divi\0\0", "divl\0\0", "divr\0\0",
+	"idivb\0", "idivs\0", "idivi\0", "idivl\0", "idivr\0",
+	"cmpb\0\0", "cmps\0\0", "cmpi\0\0", "cmpl\0\0", "cmpr\0\0",
+	"je\0\0\0\0", "jne\0\0\0", "jb\0\0\0\0", "jbe\0\0\0", "jl\0\0\0\0", "jle\0\0\0",
+	"call\0\0", "ret\0\0\0"
 };
 
 

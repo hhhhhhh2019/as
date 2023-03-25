@@ -1,4 +1,9 @@
-pushs 0x1234
-pops %0
+movl %15 start
 
-hlt
+func:
+	movb %0 0x12
+	ret
+
+start:
+	call func
+	hlt
